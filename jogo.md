@@ -3,6 +3,7 @@
 ## 1. Theme and Goal
 The game takes place in Lumen, a fragmented world filled with hostile waters, bustling villages, ruined sanctuaries, and nightmarish geometries. The player embodies an explorer who must cultivate power and defy the dangers of this realm. To progress, one must explore challenging dungeons and defeat lethal monsters and enemies. 1st place on the leaderboard is achieved by the player who accumulates the most combat victories and demonstrates complete dominance.
 
+
 ## 2. Character Classes
 | Class | Health | Attack | Defense | Ether | Class Abilities |
 | :--- | :---: | :---: | :---: | :---: | :--- |
