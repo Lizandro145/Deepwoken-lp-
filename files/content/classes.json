@@ -1,0 +1,11 @@
+{
+  "Dawnwalker":  {"ataque": 16, "defesa": 7},
+  "Starkindred": {"ataque": 14, "defesa": 6, "bonus_vida": 1.08},
+  "Contractor":  {"ataque": 15, "defesa": 8},
+  "Arcwader":    {"ataque": 15, "defesa": 9},
+  "Jetstriker":  {"ataque": 17, "defesa": 5},
+  "Linkstrider": {"ataque": 13, "defesa": 7},
+  "Silentheart": {"ataque": 18, "defesa": 8},
+  "Bladeharper": {"ataque": 16, "defesa": 6},
+  "Chainwarden": {"ataque": 14, "defesa": 10}
+}
