@@ -7,17 +7,17 @@ The game takes place in Lumen, a fragmented world filled with hostile waters, bu
 ## 2. Character Classes
 | Class | Health | Attack | Defense | Ether | Class Abilities |
 | :--- | :---: | :---: | :---: | :---: | :--- |
-| **Dawnwalker** | 224 | 16 | 7 | 100 | **Blinding Dawn, Radiant Kick, Radiant Dawn:** Blinding and high-impact solar strikes that bypass part of enemy defense. |
-| **Starkindred** | 242 *(+8% HP)* | 14 | 6 | 100 | **Ascension, Sinister Halo, Celestial Assault:** Aerial mobility, damaging halo, and celestial rush. Has +8% base health. |
-| **Contractor** | 224 | 15 | 8 | 100 | **Lord's Slice, Equalizer, Judgement:** Precise slashes that execute fatal judgements. |
-| **Arcwader** | 224 | 15 | 9 | 100 | **Arc Beam, Arc Wave, Arc Suit:** Electric beams and waves. Activating *Arc Suit* reduces all incoming damage by 20%. |
-| **Jetstriker** | 224 | 17 | 5 | 100 | **Fake Strike, Jet Kick, Rush of Ancients:** High-speed combat. *Rush of Ancients* allows attacking twice in a row. |
-| **Linkstrider** | 224 | 13 | 7 | 100 | **Link, Symbiotic Sustain, Parasitic Leech:** Support class. Requires active *Link* on target to heal allies (*Symbiotic Sustain*) or steal health from opponents (*Parasitic Leech*). |
-| **Silentheart** | 224 | 18 | 8 | 100 | **Manikati, Ankle Cutter, Rising Star, Mayhem, Relentless Hunt:** Pure physical combat master. Takes reduced magic damage and relentlessly hunts targets. |
-| **Bladeharper** | 224 | 16 | 6 | 100 | **Decimate, Palmstrike, Soaring Storm:** Fluid and lethal combinations of blade and palm strikes. |
-| **Chainwarden** | 224 | 14 | 10 | 100 | **Rupture, Impel, Restrain:** Heavy crowd control utilizing chains to immobilize and restrain opponents. |
+| **Dawnwalker** | 224 | 16 | 7 | 250 | **Blinding Dawn, Radiant Kick, Radiant Dawn:** Blinding and high-impact solar strikes that bypass part of enemy defense. |
+| **Starkindred** | 242 *(+8% HP)* | 14 | 6 | 250 | **Ascension, Sinister Halo, Celestial Assault:** Aerial mobility, damaging halo, and celestial rush. Has +8% base health. |
+| **Contractor** | 224 | 15 | 8 | 250 | **Lord's Slice, Equalizer, Judgement:** Precise slashes that execute fatal judgements. |
+| **Arcwader** | 224 | 15 | 9 | 250 | **Arc Beam, Arc Wave, Arc Suit:** Electric beams and waves. Activating *Arc Suit* reduces all incoming damage by 20%. |
+| **Jetstriker** | 224 | 17 | 5 | 250 | **Fake Strike, Jet Kick, Rush of Ancients:** High-speed combat. *Rush of Ancients* allows attacking twice in a row. |
+| **Linkstrider** | 224 | 13 | 7 | 250 | **Link, Symbiotic Sustain, Parasitic Leech:** Support class. Requires active *Link* on target to heal allies (*Symbiotic Sustain*) or steal health from opponents (*Parasitic Leech*). |
+| **Silentheart** | 224 | 18 | 8 | 250 | **Manikati, Ankle Cutter, Rising Star, Mayhem, Relentless Hunt:** Pure physical combat master. Takes reduced magic damage and relentlessly hunts targets. |
+| **Bladeharper** | 224 | 16 | 6 | 250 | **Decimate, Palmstrike, Soaring Storm:** Fluid and lethal combinations of blade and palm strikes. |
+| **Chainwarden** | 224 | 14 | 10 | 250 | **Rupture, Impel, Restrain:** Heavy crowd control utilizing chains to immobilize and restrain opponents. |
 
-Starting Money: 300 coins.
+Starting Money: 00 coins.
 
 ## 3. Experience and Levels
 - **XP needed to level up (Power):** $200 \times \text{current level}$

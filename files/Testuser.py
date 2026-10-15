@@ -1,6 +1,6 @@
-import Utilizadores as u
+import Users as u
 from Db import ligar
-from Seguranca import ErroUtilizador
+from Security import ErroUtilizador
 
 con = ligar(":memory:")
 u.registar(con, "luis", "luis@exemplo.pt", "segredo123")

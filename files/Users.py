@@ -1,6 +1,6 @@
 """Registo e sessão (Requisito 3.1)."""
 import sqlite3
-from Seguranca import ErroUtilizador, gerar_hash, verificar, validar
+from Security import ErroUtilizador, gerar_hash, verificar, validar
 
 atual = None  # utilizador com sessão iniciada (ou None)
 
