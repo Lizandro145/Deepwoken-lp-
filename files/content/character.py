@@ -17,10 +17,10 @@ def _registar_evolucao(con, p, evento):
 
 def obter(con):
     """Personagem do utilizador com sessão iniciada (ou None)."""
-    if utilizadores.atual is None:
+    if Users.atual is None:
         raise ErroUtilizador("É necessário iniciar sessão.")
     r = con.execute("SELECT * FROM personagens WHERE utilizador_id = ?",
-                    (utilizadores.atual["id"],)).fetchone()
+                    (Users.atual["id"],)).fetchone()
     return dict(r) if r else None
 
 
@@ -36,7 +36,7 @@ def criar(con, nome, classe):
     cur = con.execute(
         "INSERT INTO personagens (utilizador_id, nome, classe, nivel, xp, xp_total, vida, vida_max, "
         "energia, energia_max, dinheiro, ataque, defesa, criado_em) VALUES (?,?,?,1,0,0,?,?,?,?,?,?,?,?)",
-        (utilizadores.atual["id"], nome, classe, vida, vida, ENERGIA, ENERGIA,
+        (Users.atual["id"], nome, classe, vida, vida, ENERGIA, ENERGIA,
          DINHEIRO_INICIAL, ataque, defesa, _agora()))
     _registar_evolucao(con, {"id": cur.lastrowid, "nivel": 1, "xp_total": 0}, "Personagem criada")
     con.commit()
