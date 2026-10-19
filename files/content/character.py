@@ -1,7 +1,7 @@
 """Personagem, experiência e evolução (Requisito 3.2)."""
 import re
 from datetime import datetime
-import utilizadores
+import Users
 from classes import CLASSES, ENERGIA, DINHEIRO_INICIAL, NIVEL_MAX, vida_max, xp_necessario
 from Security import ErroUtilizador
 
