@@ -2,6 +2,7 @@
 import sqlite3
 from Security import ErroUtilizador, gerar_hash, verificar, validar
 
+TIPOS = ("Jogador", "Administrador")
 atual = None  # utilizador com sessão iniciada (ou None)
 
 
@@ -19,6 +20,12 @@ def _exigir_sessao():
 
 
 def registar(con, username, email, password, tipo="Jogador"):
+    """Cria conta. Só um administrador pode criar outros (o primeiro é livre)."""
+    if tipo not in TIPOS:
+        raise ErroUtilizador("Tipo de utilizador inválido.")
+    if tipo == "Administrador" and not e_admin() and \
+            con.execute("SELECT 1 FROM utilizadores WHERE tipo = 'Administrador'").fetchone():
+        raise ErroUtilizador("Só um administrador pode criar administradores.")
     validar(username, email, password)
     h, salt = gerar_hash(password)
     _guardar(con, "INSERT INTO utilizadores (username, email, password_hash, salt, tipo) "
