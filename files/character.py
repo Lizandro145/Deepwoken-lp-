@@ -44,6 +44,8 @@ def criar(con, nome, classe):
 
 def ganhar_xp(con, xp, motivo="Combate"):
     """Soma XP e sobe de nível sempre que atinge 200 x nível. Devolve níveis subidos."""
+    if not isinstance(xp, int) or xp <= 0:
+        raise ErroUtilizador("O XP tem de ser um número inteiro positivo.")
     p = obter(con)
     if p is None:
         raise ErroUtilizador("Ainda não tens personagem.")
