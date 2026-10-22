@@ -26,6 +26,27 @@ def criar_admin(con):
     print("Administrador criado.")
 
 
+def criar_utilizador(con):
+    Users.registar(con, pedir("Username"), pedir("Email"), getpass("Palavra-passe: "),
+                   pedir("Tipo (Jogador/Administrador)"))
+    print("Utilizador criado.")
+
+
+def editar_utilizador(con):
+    Users.editar_utilizador(con, pedir("Utilizador a editar"), pedir("Novo username"),
+                            pedir("Novo email"), pedir("Novo tipo (Jogador/Administrador)"))
+    print("Utilizador editado.")
+
+
+def apagar_utilizador(con):
+    nome = pedir("Utilizador a apagar")
+    if pedir(f"Apagar '{nome}' e a sua personagem? Escreve SIM para confirmar") != "SIM":
+        print("Cancelado.")
+        return
+    Users.apagar_utilizador(con, nome)
+    print("Utilizador apagado.")
+
+
 def minha_conta(con):
     u = Users.atual
     print(f"Username: {u['username']} | Email: {u['email']} | Tipo: {u['tipo']}")
@@ -93,8 +114,10 @@ def main():
                       "5": ("Alterar palavra-passe", alterar_password), "6": ("Terminar sessão", terminar),
                       "7": ("A minha conta", minha_conta)}
             if Users.e_admin():
-                opcoes["8"] = ("Criar administrador", criar_admin)
-                opcoes["9"] = ("Listar utilizadores", listar_utilizadores)
+                opcoes["8"] = ("[Admin] Criar utilizador", criar_utilizador)
+                opcoes["9"] = ("[Admin] Listar utilizadores", listar_utilizadores)
+                opcoes["10"] = ("[Admin] Editar utilizador", editar_utilizador)
+                opcoes["11"] = ("[Admin] Apagar utilizador", apagar_utilizador)
         opcoes["0"] = ("Sair", None)
         print()
         for chave, (nome, _) in opcoes.items():
