@@ -1,10 +1,15 @@
 """Ligação à base de dados SQLite."""
 import sqlite3
+from pathlib import Path
+
+# Fica sempre na pasta do projeto, não importa de onde o programa é corrido
+CAMINHO = Path(__file__).resolve().parent.parent / "deepwoken.db"
 
 
-def ligar(caminho="deepwoken.db"):
+def ligar(caminho=CAMINHO):
     con = sqlite3.connect(caminho)
     con.row_factory = sqlite3.Row
+    con.execute("PRAGMA foreign_keys = ON")
     con.executescript("""
     CREATE TABLE IF NOT EXISTS utilizadores (
         id INTEGER PRIMARY KEY AUTOINCREMENT,

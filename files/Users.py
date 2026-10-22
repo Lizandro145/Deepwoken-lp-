@@ -66,3 +66,10 @@ def alterar_password(con, antiga, nova):
 
 def e_admin():
     return atual is not None and atual["tipo"] == "Administrador"
+
+
+def listar(con):
+    """Lista todas as contas (só administradores)."""
+    if not e_admin():
+        raise ErroUtilizador("Só administradores podem ver esta lista.")
+    return con.execute("SELECT id, username, email, tipo FROM utilizadores ORDER BY id").fetchall()

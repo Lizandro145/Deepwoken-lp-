@@ -26,6 +26,16 @@ def criar_admin(con):
     print("Administrador criado.")
 
 
+def minha_conta(con):
+    u = Users.atual
+    print(f"Username: {u['username']} | Email: {u['email']} | Tipo: {u['tipo']}")
+
+
+def listar_utilizadores(con):
+    for r in Users.listar(con):
+        print(f"{r['id']} | {r['username']} | {r['email']} | {r['tipo']}")
+
+
 def entrar(con):
     Users.iniciar_sessao(con, pedir("Username"), getpass("Palavra-passe: "))
     print("Sessão iniciada como", Users.atual["username"], f"({Users.atual['tipo']}).")
@@ -75,13 +85,16 @@ def main():
     con = ligar()
     while True:
         if Users.atual is None:
-            opcoes = {"1": ("Registar", registar), "2": ("Iniciar sessão", entrar)}
+            opcoes = {"1": ("Registar (Jogador)", registar), "2": ("Iniciar sessão", entrar),
+                      "3": ("Registar Administrador (só o 1.º)", criar_admin)}
         else:
             opcoes = {"1": ("Personagem", ver_personagem), "2": ("Evolução da personagem", evolucao),
                       "3": ("Ganhar XP (teste)", ganhar_xp), "4": ("Alterar dados", alterar_dados),
-                      "5": ("Alterar palavra-passe", alterar_password), "6": ("Terminar sessão", terminar)}
+                      "5": ("Alterar palavra-passe", alterar_password), "6": ("Terminar sessão", terminar),
+                      "7": ("A minha conta", minha_conta)}
             if Users.e_admin():
-                opcoes["7"] = ("Criar administrador", criar_admin)
+                opcoes["8"] = ("Criar administrador", criar_admin)
+                opcoes["9"] = ("Listar utilizadores", listar_utilizadores)
         opcoes["0"] = ("Sair", None)
         print()
         for chave, (nome, _) in opcoes.items():
