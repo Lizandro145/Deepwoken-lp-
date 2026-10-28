@@ -1,0 +1,34 @@
+{
+  "tipos": ["Jogador", "Administrador"],
+  "regras": {"nivel_max": 20, "xp_por_nivel": 200, "vida_base": 224, "vida_por_nivel": 4, "energia": 100, "dinheiro_inicial": 300},
+  "seguranca": {"iteracoes": 200000},
+  "validacao": {
+    "username": {"regex": "[A-Za-z0-9_]{3,20}", "erro": "Username: 3-20 caracteres (letras, números, _)."},
+    "email": {"regex": "[^@\\s]+@[^@\\s]+\\.[^@\\s]+", "erro": "Email inválido."},
+    "password": {"regex": "(?=.*[A-Za-z])(?=.*\\d).{8,}", "erro": "Palavra-passe: mínimo 8 caracteres, com letras e números."},
+    "nome": {"regex": "[A-Za-z0-9_ ]{3,20}", "erro": "Nome: 3-20 caracteres (letras, números, _, espaço)."}
+  },
+  "classes": {
+    "Dawnwalker": {"ataque": 16, "defesa": 7},
+    "Starkindred": {"ataque": 14, "defesa": 6, "bonus_vida": 1.08},
+    "Contractor": {"ataque": 15, "defesa": 8},
+    "Arcwader": {"ataque": 15, "defesa": 9},
+    "Jetstriker": {"ataque": 17, "defesa": 5},
+    "Linkstrider": {"ataque": 13, "defesa": 7},
+    "Silentheart": {"ataque": 18, "defesa": 8},
+    "Bladeharper": {"ataque": 16, "defesa": 6},
+    "Chainwarden": {"ataque": 14, "defesa": 10}
+  },
+  "objetos": [
+    {"nome": "Ysley's Pyre Keeper", "descricao": "Espada grande (arma pesada). +15 de ataque.", "tipo": "Arma", "preco": 450, "stock": 5, "efeitos": {"ataque": 15}, "usavel": false},
+    {"nome": "Sanguine Transfuser", "descricao": "Adaga (arma leve). +6 de ataque e rouba vida ao acertar.", "tipo": "Arma", "preco": 200, "stock": 15, "efeitos": {"ataque": 6, "roubo_vida": true}, "usavel": false},
+    {"nome": "Eyes of Ethiron", "descricao": "Espadas duplas (arma média). +11 de ataque e +5% de crítico.", "tipo": "Arma", "preco": 350, "stock": 10, "efeitos": {"ataque": 11, "critico": 5}, "usavel": false},
+    {"nome": "Rimebreakers", "descricao": "Punhos (arma leve). +5 de ataque.", "tipo": "Arma", "preco": 180, "stock": 15, "efeitos": {"ataque": 5}, "usavel": false},
+    {"nome": "Red Death", "descricao": "Lança (arma média). +10 de ataque.", "tipo": "Arma", "preco": 320, "stock": 10, "efeitos": {"ataque": 10}, "usavel": false},
+    {"nome": "Gransudaruska", "descricao": "Machado grande (arma pesada). +16 de ataque.", "tipo": "Arma", "preco": 480, "stock": 5, "efeitos": {"ataque": 16}, "usavel": false},
+    {"nome": "Wood", "descricao": "Serve para fazer uma fogueira e restaurar vida fora de combate. Restaura 20 de vida.", "tipo": "Material", "preco": 20, "stock": 100, "efeitos": {"vida": 20}, "usavel": true},
+    {"nome": "Seafood Boil", "descricao": "Restaura 40 de vida e regenera Ether aos poucos.", "tipo": "Comida", "preco": 45, "stock": 50, "efeitos": {"vida": 40}, "usavel": true},
+    {"nome": "Mushroom Bisque", "descricao": "Restaura 25 de vida.", "tipo": "Comida", "preco": 30, "stock": 50, "efeitos": {"vida": 25}, "usavel": true},
+    {"nome": "Health Potion", "descricao": "Restaura 50 de vida instantaneamente.", "tipo": "Poção", "preco": 50, "stock": 100, "efeitos": {"vida": 50}, "usavel": true}
+  ]
+}

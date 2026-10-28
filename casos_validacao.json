@@ -1,0 +1,14 @@
+{
+  "validos": {
+    "username": ["ana", "Ana_99", "abcdefghijklmnopqrst"],
+    "email": ["a@b.pt", "luis.silva@exemplo.com"],
+    "password": ["segredo123", "12345abc", "Abcdefg1"],
+    "nome": ["Aldric", "Sir Lancelot", "Ana_2"]
+  },
+  "invalidos": {
+    "username": ["", "ab", "a!", "tem espaço", "abcdefghijklmnopqrstu", "a'; DROP TABLE utilizadores;--", "abc\n"],
+    "email": ["", "semarroba", "a@b", "a b@c.pt", "@c.pt"],
+    "password": ["", "abc", "curta1", "abcdefghij", "12345678"],
+    "nome": ["", "ab", "Nome!", "um nome muito comprido demais"]
+  }
+}
