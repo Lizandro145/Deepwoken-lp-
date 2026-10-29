@@ -66,7 +66,7 @@ ACOES = {
     "alterar_password": Users.alterar_password,
     "minha_conta": lambda con: tabela([Users.atual], "username", "email", "tipo"),
     "listar": lambda con: tabela(Users.listar(con), "id", "username", "email", "tipo"),
-    "editar_utilizador": Users.editar_utilizador,
+    "editar_utilizador": Users.alterar_dados,
     "apagar": apagar,
 }
 
