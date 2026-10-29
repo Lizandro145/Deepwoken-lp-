@@ -1,6 +1,6 @@
 {
   "tipos": ["Jogador", "Administrador"],
-  "regras": {"nivel_max": 20, "xp_por_nivel": 200, "vida_base": 224, "vida_por_nivel": 4, "energia": 100, "dinheiro_inicial": 300, "missoes_ativas_max": 2},
+  "regras": {"nivel_max": 20, "xp_por_nivel": 200, "vida_base": 224, "vida_por_nivel": 4, "energia": 250, "dinheiro_inicial": 300, "missoes_ativas_max": 2},
   "seguranca": {"iteracoes": 200000},
   "combate": {"critico_mult": 1.5, "ether_m1": 5, "variancia_inimigo": [0.9, 1.1], "perda_derrota": 0.2, "vida_respawn": 1, "penalizacao_fuga": 0.15, "desarmado": "Leve", "armas": {"Leve": {"variancia": [0.9, 1.1], "critico": 15}, "Média": {"variancia": [0.85, 1.15], "critico": 8}, "Pesada": {"variancia": [0.75, 1.25], "critico": 3}}},
   "validacao": {

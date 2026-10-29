@@ -13,7 +13,6 @@
     {"texto": "Aceitar missão", "acao": "aceitar_missao", "perguntas": ["Nome da missão"]},
     {"texto": "Ranking (top 10)", "acao": "ranking", "perguntas": []},
     {"texto": "A minha posição no ranking", "acao": "posicao", "perguntas": []},
-    {"texto": "Ganhar XP (teste)", "acao": "ganhar_xp", "perguntas": ["XP a ganhar"]},
     {"texto": "Loja", "acao": "loja", "perguntas": ["Filtrar por tipo: {tipos_objeto} (Enter = todos)"]},
     {"texto": "Comprar objeto", "acao": "comprar", "perguntas": ["Nome do objeto", "Quantidade"]},
     {"texto": "Vender objeto (50% do preço)", "acao": "vender", "perguntas": ["Nome do objeto", "Quantidade"]},
