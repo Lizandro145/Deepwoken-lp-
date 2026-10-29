@@ -1,7 +1,8 @@
 {
   "tipos": ["Jogador", "Administrador"],
-  "regras": {"nivel_max": 20, "xp_por_nivel": 200, "vida_base": 224, "vida_por_nivel": 4, "energia": 100, "dinheiro_inicial": 300},
+  "regras": {"nivel_max": 20, "xp_por_nivel": 200, "vida_base": 224, "vida_por_nivel": 4, "energia": 100, "dinheiro_inicial": 300, "missoes_ativas_max": 2},
   "seguranca": {"iteracoes": 200000},
+  "combate": {"critico_mult": 1.5, "ether_m1": 5, "variancia_inimigo": [0.9, 1.1], "perda_derrota": 0.2, "vida_respawn": 1, "penalizacao_fuga": 0.15, "desarmado": "Leve", "armas": {"Leve": {"variancia": [0.9, 1.1], "critico": 15}, "Média": {"variancia": [0.85, 1.15], "critico": 8}, "Pesada": {"variancia": [0.75, 1.25], "critico": 3}}},
   "validacao": {
     "username": {"regex": "[A-Za-z0-9_]{3,20}", "erro": "Username: 3-20 caracteres (letras, números, _)."},
     "email": {"regex": "[^@\\s]+@[^@\\s]+\\.[^@\\s]+", "erro": "Email inválido."},
@@ -20,15 +21,29 @@
     "Chainwarden": {"ataque": 14, "defesa": 10}
   },
   "objetos": [
-    {"nome": "Ysley's Pyre Keeper", "descricao": "Espada grande (arma pesada). +15 de ataque.", "tipo": "Arma", "preco": 450, "stock": 5, "efeitos": {"ataque": 15}, "usavel": false},
-    {"nome": "Sanguine Transfuser", "descricao": "Adaga (arma leve). +6 de ataque e rouba vida ao acertar.", "tipo": "Arma", "preco": 200, "stock": 15, "efeitos": {"ataque": 6, "roubo_vida": true}, "usavel": false},
-    {"nome": "Eyes of Ethiron", "descricao": "Espadas duplas (arma média). +11 de ataque e +5% de crítico.", "tipo": "Arma", "preco": 350, "stock": 10, "efeitos": {"ataque": 11, "critico": 5}, "usavel": false},
-    {"nome": "Rimebreakers", "descricao": "Punhos (arma leve). +5 de ataque.", "tipo": "Arma", "preco": 180, "stock": 15, "efeitos": {"ataque": 5}, "usavel": false},
-    {"nome": "Red Death", "descricao": "Lança (arma média). +10 de ataque.", "tipo": "Arma", "preco": 320, "stock": 10, "efeitos": {"ataque": 10}, "usavel": false},
-    {"nome": "Gransudaruska", "descricao": "Machado grande (arma pesada). +16 de ataque.", "tipo": "Arma", "preco": 480, "stock": 5, "efeitos": {"ataque": 16}, "usavel": false},
+    {"nome": "Ysley's Pyre Keeper", "descricao": "Espada grande (arma pesada). +15 de ataque.", "tipo": "Arma", "preco": 450, "stock": 5, "efeitos": {"ataque": 15, "peso": "Pesada"}, "usavel": false},
+    {"nome": "Sanguine Transfuser", "descricao": "Adaga (arma leve). +6 de ataque e rouba vida ao acertar.", "tipo": "Arma", "preco": 200, "stock": 15, "efeitos": {"ataque": 6, "roubo_vida": true, "peso": "Leve"}, "usavel": false},
+    {"nome": "Eyes of Ethiron", "descricao": "Espadas duplas (arma média). +11 de ataque e +5% de crítico.", "tipo": "Arma", "preco": 350, "stock": 10, "efeitos": {"ataque": 11, "critico": 5, "peso": "Média"}, "usavel": false},
+    {"nome": "Rimebreakers", "descricao": "Punhos (arma leve). +5 de ataque.", "tipo": "Arma", "preco": 180, "stock": 15, "efeitos": {"ataque": 5, "peso": "Leve"}, "usavel": false},
+    {"nome": "Red Death", "descricao": "Lança (arma média). +10 de ataque.", "tipo": "Arma", "preco": 320, "stock": 10, "efeitos": {"ataque": 10, "peso": "Média"}, "usavel": false},
+    {"nome": "Gransudaruska", "descricao": "Machado grande (arma pesada). +16 de ataque.", "tipo": "Arma", "preco": 480, "stock": 5, "efeitos": {"ataque": 16, "peso": "Pesada"}, "usavel": false},
     {"nome": "Wood", "descricao": "Serve para fazer uma fogueira e restaurar vida fora de combate. Restaura 20 de vida.", "tipo": "Material", "preco": 20, "stock": 100, "efeitos": {"vida": 20}, "usavel": true},
     {"nome": "Seafood Boil", "descricao": "Restaura 40 de vida e regenera Ether aos poucos.", "tipo": "Comida", "preco": 45, "stock": 50, "efeitos": {"vida": 40}, "usavel": true},
     {"nome": "Mushroom Bisque", "descricao": "Restaura 25 de vida.", "tipo": "Comida", "preco": 30, "stock": 50, "efeitos": {"vida": 25}, "usavel": true},
     {"nome": "Health Potion", "descricao": "Restaura 50 de vida instantaneamente.", "tipo": "Poção", "preco": 50, "stock": 100, "efeitos": {"vida": 50}, "usavel": true}
+  ],
+  "inimigos": [
+    {"nome": "Mudskipper", "poder": 1, "vida": 50, "ataque": 8, "defesa": 2, "dinheiro": 20, "xp": 50, "critico": 5, "fuga": 15},
+    {"nome": "Bandit", "poder": 3, "vida": 90, "ataque": 14, "defesa": 5, "dinheiro": 50, "xp": 120, "critico": 8, "fuga": 10},
+    {"nome": "Crab", "poder": 6, "vida": 160, "ataque": 22, "defesa": 12, "dinheiro": 110, "xp": 250, "critico": 10, "fuga": 5},
+    {"nome": "Megalodaunt", "poder": 10, "vida": 320, "ataque": 38, "defesa": 18, "dinheiro": 300, "xp": 600, "critico": 15, "fuga": 2},
+    {"nome": "Bloodlord", "poder": 15, "vida": 550, "ataque": 55, "defesa": 25, "dinheiro": 600, "xp": 1200, "critico": 18, "fuga": 1},
+    {"nome": "Deepowl", "poder": 20, "vida": 950, "ataque": 80, "defesa": 35, "dinheiro": 1200, "xp": 2500, "critico": 25, "fuga": 2}
+  ],
+  "missoes": [
+    {"nome": "Mudskipper Mayhem", "inimigo": "Mudskipper", "quantidade": 6, "dificuldade": "Fácil", "dinheiro": 80, "xp": 120},
+    {"nome": "Bandit Hunt", "inimigo": "Bandit", "quantidade": 3, "dificuldade": "Média", "dinheiro": 150, "xp": 250},
+    {"nome": "Crustacean Hunt", "inimigo": "Crab", "quantidade": 1, "dificuldade": "Difícil", "dinheiro": 250, "xp": 400},
+    {"nome": "Bravery", "inimigo": "Megalodaunt", "quantidade": 1, "dificuldade": "Muito difícil", "dinheiro": 500, "xp": 900}
   ]
 }

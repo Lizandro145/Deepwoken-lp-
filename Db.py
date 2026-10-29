@@ -1,6 +1,9 @@
 """Ligação à base de dados SQLite."""
+import json
 import sqlite3
 from pathlib import Path
+
+from dados import DADOS
 
 # Fica sempre na pasta do projeto, não importa de onde o programa é corrido
 CAMINHO = Path(__file__).resolve().parent.parent / "deepwoken.db"
@@ -27,8 +30,10 @@ def ligar(caminho=CAMINHO):
         nivel INTEGER NOT NULL, xp INTEGER NOT NULL, xp_total INTEGER NOT NULL,
         vida INTEGER NOT NULL, vida_max INTEGER NOT NULL,
         energia INTEGER NOT NULL, energia_max INTEGER NOT NULL,
-        dinheiro INTEGER NOT NULL,
+        dinheiro INTEGER NOT NULL CHECK (dinheiro >= 0),
         ataque INTEGER NOT NULL, defesa INTEGER NOT NULL,
+        vitorias INTEGER NOT NULL DEFAULT 0,
+        fuga_pendente INTEGER NOT NULL DEFAULT 0,
         criado_em TEXT NOT NULL);
 
     CREATE TABLE IF NOT EXISTS evolucao (
@@ -36,5 +41,58 @@ def ligar(caminho=CAMINHO):
         personagem_id INTEGER NOT NULL REFERENCES personagens(id),
         data TEXT NOT NULL, nivel INTEGER NOT NULL, xp_total INTEGER NOT NULL,
         evento TEXT NOT NULL);
+
+    CREATE TABLE IF NOT EXISTS objetos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nome TEXT NOT NULL UNIQUE COLLATE NOCASE,
+        descricao TEXT NOT NULL, tipo TEXT NOT NULL,
+        preco INTEGER NOT NULL CHECK (preco > 0),
+        stock INTEGER NOT NULL CHECK (stock >= 0),
+        efeitos TEXT NOT NULL, usavel INTEGER NOT NULL);
+
+    CREATE TABLE IF NOT EXISTS inventario (
+        personagem_id INTEGER NOT NULL REFERENCES personagens(id),
+        objeto_id INTEGER NOT NULL REFERENCES objetos(id),
+        quantidade INTEGER NOT NULL CHECK (quantidade > 0),
+        PRIMARY KEY (personagem_id, objeto_id));
+
+    CREATE TABLE IF NOT EXISTS inimigos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nome TEXT NOT NULL UNIQUE COLLATE NOCASE,
+        poder INTEGER NOT NULL,
+        vida INTEGER NOT NULL CHECK (vida > 0),
+        ataque INTEGER NOT NULL, defesa INTEGER NOT NULL,
+        dinheiro INTEGER NOT NULL, xp INTEGER NOT NULL,
+        critico INTEGER NOT NULL, fuga INTEGER NOT NULL);
+
+    CREATE TABLE IF NOT EXISTS missoes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nome TEXT NOT NULL UNIQUE COLLATE NOCASE,
+        inimigo_id INTEGER NOT NULL REFERENCES inimigos(id),
+        quantidade INTEGER NOT NULL CHECK (quantidade > 0),
+        dificuldade TEXT NOT NULL,
+        dinheiro INTEGER NOT NULL, xp INTEGER NOT NULL);
+
+    CREATE TABLE IF NOT EXISTS missoes_personagem (
+        personagem_id INTEGER NOT NULL REFERENCES personagens(id),
+        missao_id INTEGER NOT NULL REFERENCES missoes(id),
+        estado TEXT NOT NULL CHECK (estado IN ('Ativa','Concluída','Falhada')),
+        progresso INTEGER NOT NULL DEFAULT 0,
+        PRIMARY KEY (personagem_id, missao_id));
     """)
+    colunas = {r[1] for r in con.execute("PRAGMA table_info(personagens)")}  # bases de dados antigas
+    for coluna in ("vitorias", "fuga_pendente"):
+        if coluna not in colunas:
+            con.execute(f"ALTER TABLE personagens ADD COLUMN {coluna} INTEGER NOT NULL DEFAULT 0")
+    for o in DADOS["objetos"]:  # só insere os que ainda não existem
+        con.execute("INSERT OR IGNORE INTO objetos (nome, descricao, tipo, preco, stock, efeitos, usavel) "
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)", (o["nome"], o["descricao"], o["tipo"], o["preco"],
+                                                     o["stock"], json.dumps(o["efeitos"]), int(o["usavel"])))
+    for i in DADOS["inimigos"]:
+        con.execute("INSERT OR IGNORE INTO inimigos (nome, poder, vida, ataque, defesa, dinheiro, xp, critico, fuga) "
+                    "VALUES (:nome, :poder, :vida, :ataque, :defesa, :dinheiro, :xp, :critico, :fuga)", i)
+    for m in DADOS["missoes"]:
+        con.execute("INSERT OR IGNORE INTO missoes (nome, inimigo_id, quantidade, dificuldade, dinheiro, xp) "
+                    "VALUES (:nome, (SELECT id FROM inimigos WHERE nome = :inimigo), :quantidade, :dificuldade, :dinheiro, :xp)", m)
+    con.commit()
     return con
