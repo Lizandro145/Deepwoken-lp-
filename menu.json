@@ -7,6 +7,7 @@
   "jogador": [
     {"texto": "Personagem", "acao": "personagem", "perguntas": []},
     {"texto": "Evolução da personagem", "acao": "evolucao", "perguntas": []},
+    {"texto": "Estatísticas", "acao": "estatisticas", "perguntas": []},
     {"texto": "Ver inimigos", "acao": "inimigos", "perguntas": []},
     {"texto": "Combate", "acao": "combate", "perguntas": ["Inimigo ({inimigos})"]},
     {"texto": "Missões", "acao": "missoes", "perguntas": []},
@@ -17,6 +18,7 @@
     {"texto": "Comprar objeto", "acao": "comprar", "perguntas": ["Nome do objeto", "Quantidade"]},
     {"texto": "Vender objeto (50% do preço)", "acao": "vender", "perguntas": ["Nome do objeto", "Quantidade"]},
     {"texto": "Inventário", "acao": "inventario", "perguntas": []},
+    {"texto": "Histórico de compras e vendas", "acao": "transacoes", "perguntas": []},
     {"texto": "Usar objeto", "acao": "usar", "perguntas": ["Nome do objeto"]},
     {"texto": "Verificar quantidade disponível", "acao": "quantidade", "perguntas": ["Nome do objeto"]},
     {"texto": "Alterar dados", "acao": "alterar_dados", "perguntas": ["Novo username", "Novo email"], "ok": "Dados alterados."},
@@ -29,6 +31,8 @@
     {"texto": "[Admin] Listar utilizadores", "acao": "listar", "perguntas": []},
     {"texto": "[Admin] Editar utilizador", "acao": "editar_utilizador", "perguntas": ["Utilizador a editar", "Novo username", "Novo email", "Novo tipo ({tipos_utilizador})"], "ok": "Utilizador editado."},
     {"texto": "[Admin] Apagar utilizador", "acao": "apagar", "perguntas": ["Utilizador a apagar", "Escreve SIM para confirmar"]},
+    {"texto": "[Admin] Bloquear utilizador", "acao": "bloquear_utilizador", "perguntas": ["Utilizador a bloquear"], "ok": "Utilizador bloqueado."},
+    {"texto": "[Admin] Desbloquear utilizador", "acao": "desbloquear_utilizador", "perguntas": ["Utilizador a desbloquear"], "ok": "Utilizador desbloqueado."},
     {"texto": "[Admin] Alterar preço e stock da loja", "acao": "alterar_loja", "perguntas": ["Nome do objeto", "Novo preço", "Novo stock"], "ok": "Loja atualizada."},
     {"texto": "[Admin] Alterar missão", "acao": "alterar_missao", "perguntas": ["Nome da missão", "Nova quantidade de inimigos", "Novo dinheiro", "Novo XP"], "ok": "Missão atualizada."},
     {"texto": "[Admin] Alterar inimigo", "acao": "alterar_inimigo", "perguntas": ["Nome do inimigo", "Nova vida", "Novo ataque", "Nova defesa"], "ok": "Inimigo atualizado."}

@@ -1,7 +1,7 @@
 ## Game Development Plan (Deepwoken)
 
 ## 1. Overview
-This document outlines the game's development phases, mapping all specifications from `docs/jogo.md` into practical code implementation.
+This document outlines the game's development phases, mapping all specifications from `game.md` into practical code implementation.
 
 ---
 
@@ -70,4 +70,4 @@ This document outlines the game's development phases, mapping all specifications
 ---
 
 ## 3. Completion Criteria
-Development is complete when all requirements in `docs/jogo.md` pass tests, combat executes smoothly in loops, and leaderboard/inventory persistence works reliably.
+Development is complete when all requirements in `game.md` pass tests, combat executes smoothly in loops, and leaderboard/inventory persistence works reliably.

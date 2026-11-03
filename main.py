@@ -13,7 +13,7 @@ import combate
 import loja
 import missoes
 import Ranking
-from classes import CLASSES, xp_necessario
+from classes import CLASSES
 from dados import DADOS
 from Db import ligar
 from Security import ErroUtilizador
@@ -33,11 +33,14 @@ def personagem(con):
     if character.obter(con) is None:
         print("Classes:", ", ".join(CLASSES))
         character.criar(con, input("Nome: ").strip(), input("Classe: ").strip())
-    p = character.obter(con)
-    return (f"{p['nome']} ({p['classe']}) | nível {p['nivel']} | XP {p['xp']}/{xp_necessario(p['nivel'])}"
-            f" | vida {p['vida']}/{p['vida_max']} | energia {p['energia']}/{p['energia_max']}"
-            f" | dinheiro {p['dinheiro']} | ataque {p['ataque']} | defesa {p['defesa']} | vitórias {p['vitorias']}"
-            f" | criada em {p['criado_em']}")
+    return character.obter(con).resumo()
+
+
+def estatisticas(con):
+    e, t = character.estatisticas(con), loja.totais(con)
+    return (f"XP ganho: {e['xp_ganho']} (em {e['ganhos_de_xp']} ganhos) | níveis subidos: {e['niveis_subidos']} | vitórias: {character.obter(con).vitorias}\n"
+            f"Compras: {t['compra']['unidades']} unidade(s) por {t['compra']['moedas']} moedas | "
+            f"Vendas: {t['venda']['unidades']} unidade(s) por {t['venda']['moedas']} moedas")
 
 
 def apagar(con, username, confirmacao):
@@ -81,7 +84,7 @@ ACOES = {
     "combate": lutar,
     "missoes": lambda con: tabela(missoes.listar(con), "nome", "objetivo", "dificuldade", "dinheiro", "xp", "estado_txt"),
     "aceitar_missao": missoes.aceitar,
-    "Ranking": lambda con: tabela(Ranking.tabela(con), "posicao", "personagem", "jogador", "classe", "nivel", "xp_total", "vitorias", "missoes"),
+    "ranking": lambda con: tabela(Ranking.tabela(con), "posicao", "personagem", "jogador", "classe", "nivel", "xp_total", "vitorias", "missoes"),
     "posicao": lambda con: "Estás em %d.º lugar entre %d personagem(ns)." % Ranking.posicao(con),
     "alterar_missao": missoes.alterar_missao,
     "alterar_inimigo": combate.alterar_inimigo,
@@ -92,10 +95,14 @@ ACOES = {
     "usar": loja.usar,
     "quantidade": lambda con, nome: "%s: %d na loja | %d no teu inventário" % ((nome,) + loja.quantidade(con, nome)),
     "alterar_loja": loja.alterar_loja,
+    "estatisticas": estatisticas,
+    "transacoes": lambda con: tabela(loja.historico(con), "data", "tipo", "objeto", "quantidade", "preco_unitario", "total") or "Ainda não fizeste compras nem vendas.",
+    "bloquear_utilizador": Users.bloquear,
+    "desbloquear_utilizador": Users.desbloquear,
     "alterar_dados": Users.alterar_dados,
     "alterar_password": Users.alterar_password,
     "minha_conta": lambda con: tabela([Users.atual], "username", "email", "tipo"),
-    "listar": lambda con: tabela(Users.listar(con), "id", "username", "email", "tipo"),
+    "listar": lambda con: tabela(Users.listar(con), "id", "username", "email", "tipo", "bloqueado"),
     "editar_utilizador": Users.editar_utilizador,
     "apagar": apagar,
 }
@@ -104,6 +111,11 @@ ACOES = {
 def main():
     con = ligar()
     while True:
+        if Users.atual is not None:  # a conta pode ter sido bloqueada por um administrador entretanto
+            try:
+                Users.verificar_sessao(con)
+            except ErroUtilizador as erro:
+                print("Erro:", erro)
         menu = MENU["visitante"] if Users.atual is None else MENU["jogador"] + (MENU["admin"] if Users.e_admin() else [])
         print()
         for numero, o in enumerate(menu, 1):

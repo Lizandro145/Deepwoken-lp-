@@ -80,8 +80,7 @@ def falhar_ativas(con, pid):
 
 def alterar_missao(con, nome, quantidade, dinheiro, xp):
     """Só administradores."""
-    if not Users.e_admin():
-        raise ErroUtilizador("Só administradores podem fazer isto.")
+    Users.exigir_admin(con)
     m = _missao(con, nome)
     with con:
         con.execute("UPDATE missoes SET quantidade = ?, dinheiro = ?, xp = ? WHERE id = ?",

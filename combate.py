@@ -38,7 +38,7 @@ def iniciar(con, nome):
     p = character.obter(con)
     if p is None:
         raise ErroUtilizador("Ainda não tens personagem.")
-    if p["vida"] < 1:
+    if not p.esta_vivo:
         raise ErroUtilizador("Precisas de pelo menos 1 de vida para combater.")
     ini = con.execute("SELECT * FROM inimigos WHERE nome = ? COLLATE NOCASE", (nome,)).fetchone()
     if ini is None:
@@ -57,12 +57,11 @@ def turno(con, e, acao, item=None):
         extra, peso, crit_arma = _arma(con, p["id"])
         regra = C["armas"][peso]
         mult = 1 - C["penalizacao_fuga"] if e["penalizado"] else 1
-        dano, crit = _golpe(p["ataque"] + extra, ini["defesa"], regra["variancia"], regra["critico"] + crit_arma, mult)
+        dano, crit = _golpe(p["ataque"] + extra, ini["defesa"], regra["variancia"], regra["critico"] + crit_arma + p["sorte"], mult)  # +1% de crítico por ponto de sorte
         e["vida"] = max(0, e["vida"] - dano)
-        energia = min(p["energia_max"], p["energia"] + C["ether_m1"])
+        ganho = p.recuperar_energia(C["ether_m1"])
         with con:
-            con.execute("UPDATE personagens SET energia = ? WHERE id = ?", (energia, p["id"]))
-        ganho = energia - p["energia"]
+            con.execute("UPDATE personagens SET energia = ? WHERE id = ?", (p.energia, p.id))
         log.append(f"Acertas em {ini['nome']} e causas {dano} de dano{' (CRÍTICO!)' if crit else ''}."
                    + (f" +{ganho} Ether." if ganho else ""))
     elif acao == "item":
@@ -81,7 +80,7 @@ def turno(con, e, acao, item=None):
         return log + _vitoria(con, e)
     p = character.obter(con)  # o item pode ter mudado a vida
     dano, crit = _golpe(ini["ataque"], p["defesa"], C["variancia_inimigo"], ini["critico"])
-    vida = max(0, p["vida"] - dano)
+    vida = p.receber_dano(dano)
     with con:
         con.execute("UPDATE personagens SET vida = ? WHERE id = ?", (vida, p["id"]))
     log.append(f"{ini['nome']} acerta-te e causa {dano} de dano{' (CRÍTICO!)' if crit else ''}.")
@@ -119,8 +118,7 @@ def _derrota(con, e):
 
 def alterar_inimigo(con, nome, vida, ataque, defesa):
     """Só administradores."""
-    if not Users.e_admin():
-        raise ErroUtilizador("Só administradores podem fazer isto.")
+    Users.exigir_admin(con)
     ini = con.execute("SELECT id FROM inimigos WHERE nome = ? COLLATE NOCASE", (nome,)).fetchone()
     if ini is None:
         raise ErroUtilizador("Esse inimigo não existe.")

@@ -6,7 +6,7 @@ from pathlib import Path
 from dados import DADOS
 
 # Fica sempre na pasta do projeto, não importa de onde o programa é corrido
-CAMINHO = Path(__file__).resolve().parent.parent / "deepwoken.db"
+CAMINHO = Path(__file__).resolve().parent / "deepwoken.db"
 
 
 def ligar(caminho=CAMINHO):
@@ -17,9 +17,10 @@ def ligar(caminho=CAMINHO):
     CREATE TABLE IF NOT EXISTS utilizadores (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT NOT NULL UNIQUE COLLATE NOCASE,
-        email TEXT NOT NULL,
+        email TEXT NOT NULL UNIQUE COLLATE NOCASE,
         password_hash TEXT NOT NULL,
         salt TEXT NOT NULL,
+        bloqueado INTEGER NOT NULL DEFAULT 0,
         tipo TEXT NOT NULL CHECK (tipo IN ('Jogador','Administrador')));
 
     CREATE TABLE IF NOT EXISTS personagens (
@@ -32,6 +33,7 @@ def ligar(caminho=CAMINHO):
         energia INTEGER NOT NULL, energia_max INTEGER NOT NULL,
         dinheiro INTEGER NOT NULL CHECK (dinheiro >= 0),
         ataque INTEGER NOT NULL, defesa INTEGER NOT NULL,
+        sorte INTEGER NOT NULL DEFAULT 0,
         vitorias INTEGER NOT NULL DEFAULT 0,
         fuga_pendente INTEGER NOT NULL DEFAULT 0,
         criado_em TEXT NOT NULL);
@@ -40,7 +42,9 @@ def ligar(caminho=CAMINHO):
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         personagem_id INTEGER NOT NULL REFERENCES personagens(id),
         data TEXT NOT NULL, nivel INTEGER NOT NULL, xp_total INTEGER NOT NULL,
-        evento TEXT NOT NULL);
+        evento TEXT NOT NULL,
+        tipo TEXT NOT NULL DEFAULT 'outro',   -- criacao | xp | nivel
+        valor INTEGER NOT NULL DEFAULT 0);    -- XP ganho ou nível alcançado
 
     CREATE TABLE IF NOT EXISTS objetos (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -55,6 +59,15 @@ def ligar(caminho=CAMINHO):
         objeto_id INTEGER NOT NULL REFERENCES objetos(id),
         quantidade INTEGER NOT NULL CHECK (quantidade > 0),
         PRIMARY KEY (personagem_id, objeto_id));
+
+    CREATE TABLE IF NOT EXISTS transacoes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        personagem_id INTEGER NOT NULL REFERENCES personagens(id),
+        objeto_id INTEGER NOT NULL REFERENCES objetos(id),
+        tipo TEXT NOT NULL CHECK (tipo IN ('compra','venda')),
+        quantidade INTEGER NOT NULL CHECK (quantidade > 0),
+        preco_unitario INTEGER NOT NULL CHECK (preco_unitario >= 0),
+        data TEXT NOT NULL);
 
     CREATE TABLE IF NOT EXISTS inimigos (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -80,10 +93,14 @@ def ligar(caminho=CAMINHO):
         progresso INTEGER NOT NULL DEFAULT 0,
         PRIMARY KEY (personagem_id, missao_id));
     """)
-    colunas = {r[1] for r in con.execute("PRAGMA table_info(personagens)")}  # bases de dados antigas
-    for coluna in ("vitorias", "fuga_pendente"):
-        if coluna not in colunas:
-            con.execute(f"ALTER TABLE personagens ADD COLUMN {coluna} INTEGER NOT NULL DEFAULT 0")
+    for tabela, novas in {"utilizadores": {"bloqueado": "INTEGER NOT NULL DEFAULT 0"},  # bases de dados antigas
+                          "personagens": {"sorte": "INTEGER NOT NULL DEFAULT 0", "vitorias": "INTEGER NOT NULL DEFAULT 0",
+                                          "fuga_pendente": "INTEGER NOT NULL DEFAULT 0"},
+                          "evolucao": {"tipo": "TEXT NOT NULL DEFAULT 'outro'", "valor": "INTEGER NOT NULL DEFAULT 0"}}.items():
+        existentes = {r[1] for r in con.execute(f"PRAGMA table_info({tabela})")}
+        for coluna, definicao in novas.items():
+            if coluna not in existentes:
+                con.execute(f"ALTER TABLE {tabela} ADD COLUMN {coluna} {definicao}")
     for o in DADOS["objetos"]:  # só insere os que ainda não existem
         con.execute("INSERT OR IGNORE INTO objetos (nome, descricao, tipo, preco, stock, efeitos, usavel) "
                     "VALUES (?, ?, ?, ?, ?, ?, ?)", (o["nome"], o["descricao"], o["tipo"], o["preco"],

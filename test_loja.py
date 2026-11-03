@@ -33,8 +33,11 @@ assert loja.comprar(con, POCAO.lower(), 2) == 2 * preco(POCAO)  # nome sem maiú
 assert c.obter(con)["dinheiro"] == DINHEIRO - 2 * preco(POCAO)
 assert loja.quantidade(con, POCAO) == (OBJ[POCAO]["stock"] - 2, 2)
 falha("dinheiro insuficiente", loja.comprar, con, CARA, 1)
+assert c.obter(con)["dinheiro"] == DINHEIRO - 2 * preco(POCAO) and loja.quantidade(con, CARA)[0] == OBJ[CARA]["stock"]  # nada mudou
 falha("mais que o stock", loja.comprar, con, RARA, OBJ[RARA]["stock"] + 1)
 falha("quantidade 0", loja.comprar, con, "Wood", 0)
+falha("comprar quantidade negativa", loja.comprar, con, "Wood", -3)
+falha("vender quantidade negativa", loja.vender, con, POCAO, -3)
 falha("quantidade decimal", loja.comprar, con, "Wood", 1.5)
 falha("quantidade gigante", loja.comprar, con, "Wood", 10**30)
 falha("quantidade 'abc'", loja.comprar, con, "Wood", "abc")
@@ -74,4 +77,23 @@ try:
 except Exception:
     pass
 assert (c.obter(con2)["dinheiro"], loja.quantidade(con2, POCAO)[0]) == antes
+
+# registo das transações (4.º passo da compra) e estatísticas por GROUP BY
+con3 = ligar(":memory:")
+u.registar(con3, "bia", "bia@exemplo.pt", "segredo123"); u.iniciar_sessao(con3, "bia", "segredo123")
+c.criar(con3, "Bia", "Dawnwalker")
+loja.comprar(con3, POCAO, 3); loja.vender(con3, POCAO, 1)
+h = loja.historico(con3)
+assert [(x["tipo"], x["quantidade"], x["preco_unitario"], x["total"]) for x in h] == [
+    ("compra", 3, preco(POCAO), 3 * preco(POCAO)), ("venda", 1, preco(POCAO) // 2, preco(POCAO) // 2)]
+assert loja.totais(con3) == {"compra": {"unidades": 3, "moedas": 3 * preco(POCAO)},
+                             "venda": {"unidades": 1, "moedas": preco(POCAO) // 2}}
+# se o registo da transação falhar, a compra inteira é desfeita
+con3.execute("CREATE TRIGGER falha4 BEFORE INSERT ON transacoes BEGIN SELECT RAISE(ABORT, 'falha simulada'); END")
+antes = (c.obter(con3)["dinheiro"], loja.quantidade(con3, POCAO))
+try:
+    loja.comprar(con3, POCAO, 1)
+except Exception:
+    pass
+assert (c.obter(con3)["dinheiro"], loja.quantidade(con3, POCAO)) == antes
 print("Todos os testes da loja passaram.")
